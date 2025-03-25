@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books</title>
+    <script src="./vueversion3.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+</head>
+
+<body>
+
+    <div id="app">
+
+        <!------------------ navbar ---------------------->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm mb-4">
+            <div class="container">
+                <a href="#" class="navbar-brand fw-bold" style="color: #000000;" @click.prevent="iscartvisible=false ">
+                    <i class=" bi bi-book me-2"></i>BookStore
+                </a>
+
+                <div class="d-flex align-items-center">
+                    <div class="text-white me-3">
+                        <span class="badge bg-warning text-dark me-1"></span>
+                        <span>Items | Total: </span>
+                    </div>
+                    <button class="btn btn-warning fw-bold" @click.prevent="iscartvisible=true">
+                        <i class="bi bi-cart3 me-1"></i> View Cart
+                    </button>
+                </div>
+            </div>
+        </nav>
+        <!------------------------ my list of Books  --------------------------->
+        <ul class="list-unstyled row" v-if="iscartvisible==false">
+            <li v-for="book in books" :key="book.isbn" class="col-md-4 col-lg-3 mb-4">
+                <div class="card h-100">
+                    <!-- Book Image -->
+                    <div class="card-img-top bg-light d-flex justify-content-center align-items-center"
+                        style="height: 200px;">
+                        <!-- <span v-if="!book.imageLink" class="text-muted">{{books.imageLink}}</span> -->
+                        <span v-if="!book.imageLink" class="text-muted">Book Image</span>
+                        <img v-else :src="book.imageLink" alt="Book cover" class="img-fluid h-100">
+                    </div>
+
+                    <div class="card-body">
+                        <!-- Category and Author -->
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                <small class="text-muted">Category</small>
+                                <p class="mb-0">{{ book.category }}</p>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted">Author</small>
+                                <p class="mb-0">{{ book.author }}</p>
+                            </div>
+                        </div>
+
+                        <!-- Pages and Price -->
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                <small class="text-muted">#Pages</small>
+                                <p class="mb-0">{{ book.pages }}</p>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted">Price</small>
+                                <p class="mb-0">${{ book.price.toFixed(2) }}</p>
+                            </div>
+                        </div>
+
+                        <!-- ISBN and Add Button -->
+                        <div class="row">
+                            <div class="col-6">
+                                <small class="text-muted">ISBN</small>
+                                <p class="mb-0">{{ book.isbn }}</p>
+                            </div>
+                            <div class="col-6 d-flex align-items-end">
+                                <button @click="addToCart(book)" class="btn btn-success btn-sm w-100">
+                                    Add To List
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <!------------------------------------------Books List End --------------------------------------------------------------------->
+        <!------------------------------------------cart--------------------------------------------------------------------------------->
+        <div class="d-flex justify-content-center align-items-baseline" v-else>
+            <h4 class="w-100 text-center text-danger" v-if="cart.items.length==0">Sorry , your cart is Empty , Please
+                Add more !!</h4>
+            <table class="table table-striped table-bordered text-center mt-2" v-else>
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>ISBN</th>
+                        <th>Author</th>
+                        <th>Category</th>
+                        <th>price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item in cart.items" :key="item.book.id">
+                        <td><img :src="item.book.imageLink" alt="Book cover" style="height: 50px;"
+                                v-if="item.book.imageLink"></td>
+                        <td>{{item.book.isbn}}</td>
+                        <td>{{item.book.author}}</td>
+                        <td>{{item.book.category}}</td>
+                        <td>{{currencyFormater(item.book.price)}}</td>
+                        <td>{{item.quantity}}</td>
+                        <td>{{currencyFormater(item.quantity*item.book.price)}}</td>
+                        <td>
+                            <button class="btn btn-danger" @click="decreaseQuantity(item)">-
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="4">Total Price</th>
+                        <th colspan="2">{{currencyFormater(getTotal())}}</th>
+                    </tr>
+                    <tr>
+                        <th colspan="4">Total Tax</th>
+                        <th colspan="2">{{currencyFormater(getTotal()*0.1)}}</th>
+                    </tr>
+                    <tr>
+                        <th colspan="4">Grand Total</th>
+                        <th colspan="2">{{currencyFormater(getTotal()*0.1 + getTotal())}}</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <!------------------------------------------Cart End --------------------------------------------------------------------->
+    </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <!-- ======================================================================================================================== -->
+    <script src="./books.js"></script>
+    <script>
+        Vue.createApp({
+            data: () => ({
+                books: books,
+                iscartvisible: false,
+                cart: {
+                    items: []
+                }
+            }),
+            methods: {
+                isBookExist(book) {
+                    return this.cart.items.some(item => item.book.isbn === book.isbn);
+                },
+                addToCart(book) {
+                    if (this.isBookExist(book)) {
+                        this.cart.items.find(item => item.book.isbn === book.isbn).quantity++;
+                    } else {
+                        this.cart.items.push({ book: book, quantity: 1 });
+                    }
+                },
+                currencyFormater(val) {
+                    return new Intl.NumberFormat("en-US", {
+                        style: "currency",
+                        currency: "USD"
+                    }).format(val);
+                },
+                getTotal() {
+                    return this.cart.items.reduce((total, item) => {
+                        return total + (item.book.price * item.quantity);
+                    }, 0);
+                },
+                decreaseQuantity(item) {
+                    item.quantity--;
+                    if (item.quantity === 0) {
+                        this.cart.items.splice(this.cart.items.findIndex(it => it.book.isbn === item.book.isbn), 1);
+                    }
+                }
+            }
+        }).mount('#app');
+
+    </script>
+</body>
+
+</html>
