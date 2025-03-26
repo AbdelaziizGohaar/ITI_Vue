@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Post</title>
+    <script src="./vueversion3.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .form-section {
+            background-color: #d5dfe9;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+
+        <div class="container py-5">
+            <!---------------------------------Post Create  begin --------------------------------------------->
+            <div class="Mainform" v-if="Post_visible==false">
+                <h1 class="mb-4">Create a New Post</h1>
+
+                <!-----------------------------------  Title Section ---------------------------------->
+                <div class="form-section">
+                    <div class="section-title">Host Title</div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" v-model="Title" placeholder="Hi">
+                    </div>
+                    <!--------------------------------------Categoru------------------------------------------>
+                    <div class="mb-3">
+                        <label class="form-label">Category</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="category" id="design" value="Horror"
+                                v-model="Category">
+                            <label class="form-check-label" for="design">Horror</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="category" id="network" value="Tragedy"
+                                v-model="Category">
+                            <label class="form-check-label" for="network">Tragedy</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="category" id="database" value="Comedy"
+                                v-model="Category">
+                            <label class="form-check-label" for="database">Comedy</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="category" id="Action" value="Action"
+                                v-model="Category">
+                            <label class="form-check-label" for="development">Action</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-----------------------------------  Send Edition Section ---------------------------------->
+                <div class="form-section">
+                    <div class="section-title">Send Edition</div>
+                    <div class="mb-3">
+                        <select class="form-select" aria-label="Edition selection" v-model="Edition">
+                            <option value="1st">First Edition</option>
+                            <option value="2nd">Second Edition</option>
+                            <option value="3rd">Third Edition</option>
+                            <option value="4th">Special Edition</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-----------------------------------  Networks Section ---------------------------------->
+                <div class="form-section">
+                    <div class="section-title">Networks</div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="facebook" value="facebook"
+                            v-model="Networks">
+                        <label class="form-check-label" for="facebook">Facebook</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="x" value="X" v-model="Networks">
+                        <label class="form-check-label" for="x">X</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="youtube" value="youtube" v-model="Networks">
+                        <label class="form-check-label" for="youtube">Youtube</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="instagram" value="instagram"
+                            v-model="Networks">
+                        <label class="form-check-label" for="instagram">Instagram</label>
+                    </div>
+                </div>
+
+                <!-----------------------------------  Publish Now Section ---------------------------------->
+                <div class="form-section">
+                    <div class="section-title">Publish Now</div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="next" v-model="Publish">
+                        <label class="form-check-label" for="next">Yup</label>
+                    </div>
+                </div>
+
+                <!----------------------------------- Publish Button ---------------------------------->
+                <button class="btn btn-primary" @click="Post_visible = true">Publish</button>
+            </div>
+            <!---------------------------------Post Create End --------------------------------------------->
+            <!----------------------------------Post form begin----------------------------------------------->
+            <div class="container py-5" v-else>
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="text-center mb-4">
+                            <h1 class="mb-3">Post Created</h1>
+                            <div class="alert alert-success mb-4">
+                                Your post has been successfully created!
+                            </div>
+                        </div>
+
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div class="border-bottom pb-3 mb-3">
+                                    <h5 class="text-muted mb-2">Post Title:</h5>
+                                    <p class="fs-5">{{Title}}</p>
+                                </div>
+
+                                <div class="border-bottom pb-3 mb-3">
+                                    <h5 class="text-muted mb-2">Category:</h5>
+                                    <p class="fs-5">{{Category}}</p>
+                                </div>
+
+                                <div class="border-bottom pb-3 mb-3">
+                                    <h5 class="text-muted mb-2">Edition:</h5>
+                                    <p class="fs-5">{{Edition}}</p>
+                                </div>
+
+                                <div class="border-bottom pb-3 mb-3">
+                                    <h5 class="text-muted mb-2">Social Networks:</h5>
+                                    <p class="fs-5">{{Networks}}</p>
+                                </div>
+
+                                <div>
+                                    <h5 class="text-muted mb-2">Publish Now:</h5>
+                                    <p class="fs-5">{{Publish}}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 col-md-6 mx-auto">
+                            <button class="btn btn-primary btn-lg" @click="Post_visible = false">Edit Post</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!----------------------------------Post form begin----------------------------------------------->
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+
+        Vue.createApp({
+            data: () => ({
+                Post_visible: false,
+                Title: "",
+                Category: "Action",
+                Edition: "",
+                Networks: [],
+                Publish: "No"
+            }),
+            methods: {
+
+            }
+        }).mount("#app");
+
+    </script>
+</body>
+
+</html>
